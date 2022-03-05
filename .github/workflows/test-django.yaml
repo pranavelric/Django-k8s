@@ -16,6 +16,25 @@ jobs:
         working-directory: ./web
     env:
       DJANGO_SECRET_KEY: F9jgZrq91O9wFOZLTOmWwN87h46ykmbqxbvDgXuHAkc
+      POSTGRES_DB: dockerdc
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_USER: myuser
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: 5432
+    services:
+      postgres_db:
+        image: postgres:14
+        env:
+          POSTGRES_DB: ${{env.POSTGRES_DB}}
+          POSTGRES_PASSWORD: ${{env.POSTGRES_PASSWORD}}
+          POSTGRES_USER: ${{env.POSTGRES_USER}}
+        ports:
+          - 5432:5432
+        options: >-
+          --healts-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     strategy:
       max-parallel: 4
       matrix:
