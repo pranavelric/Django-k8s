@@ -24,8 +24,12 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = str(os.environ.get('DEBUG'))=="1"
-
+ENV_ALLOWED_HOST = os.environ.get("ALLOWED_HOST")
 ALLOWED_HOSTS = []
+
+if ENV_ALLOWED_HOST:
+    ALLOWED_HOSTS = [ENV_ALLOWED_HOST]
+
 
 
 # Application definition
@@ -92,6 +96,7 @@ DB_IS_AVAIL = all([
     DB_HOST,
     DB_PORT
 ])
+DB_IGNORE_SSL= os.environ.get("DB_IGNORE_SSL")=="true"
 
 # POSTGRES_READY=str(os.environ.get('POSTGRES_READY'))=="1"
 # if DB_IS_AVAIL and POSTGRES_READY:
@@ -107,7 +112,10 @@ if DB_IS_AVAIL:
             "PORT": DB_PORT,
         }
     }
-
+if not DB_IGNORE_SSL:
+    DATABASES["default"]["OPTIONS"] = {
+        "sslmode": "require"
+    }
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
