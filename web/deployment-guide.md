@@ -37,7 +37,7 @@ kubectl rollout restart deployment/django-k8s-web-deployment
 
 - Image update:
 ```
-kubectl set image deployment/django-k8s-web-deployment django-k8s-web=registry.digitalocean.com/cfe-k8s/django-k8s-web:latest
+kubectl set image deployment/django-k8s-web-deployment django-k8s-web=registry.digitalocean.com/django-k8s/django-k8s-web:latest
 ```
 
 - Update an Environment Variable (within Deployment yaml):
