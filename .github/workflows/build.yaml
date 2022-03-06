@@ -16,7 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: [test_django_job]
     env:
-      DJANGO_SECRET_KEY: F9jgZrq91O9wFOZLTOmWwN87h46ykmbqxbvDgXuHAkc
       CLUSTER_NAME: django-k8s
     steps:
     - name: Checkout code
@@ -40,6 +39,8 @@ jobs:
     - name: Update Deployments Secrets
       run: |
         cat <<EOF>> web/.env.prod
+        AWS_ACCESS_KEY_ID=${{secrets.AWS_ACCESS_KEY_ID}}
+        AWS_SECRET_ACCESS_KEY=${{secrets.AWS_SECRET_ACCESS_KEY}}
         ALLOWED_HOST=${{secrets.ALLOWED_HOST}}
         DJANGO_SUPERUSER_USERNAME=${{secrets.DJANGO_SUPERUSER_USERNAME}}
         DJANGO_SUPERUSER_PASSWORD=${{secrets.DJANGO_SUPERUSER_PASSWORD}}
@@ -63,5 +64,6 @@ jobs:
       run: |
         export SINGLE_POD_NAME=$(kubectl get pod -l app=django-k8s-web-deployment -o jsonpath="{.items[0].metadata.name}")
         kubectl exec -it $SINGLE_POD_NAME -- bash /app/migrate.sh
+        kubectl exec -it $SINGLE_POD_NAME -- bash /app/collectstatic.sh
 
 
