@@ -1,0 +1,21 @@
+name: Build Docker Container & Push to DO Registery
+
+on:
+  workflow_call:
+  workflow_dispatch:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+
+jobs:
+  test_django:
+    uses: pranavelric/Django-k8s/.github/workflows/test-django.yaml@master
+  docker_build:
+    runs-on: ubuntu-latest
+    env:
+      DJANGO_SECRET_KEY: F9jgZrq91O9wFOZLTOmWwN87h46ykmbqxbvDgXuHAkc
+    steps:
+    - uses: actions/checkout@v2
+
