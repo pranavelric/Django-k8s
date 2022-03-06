@@ -39,6 +39,7 @@ jobs:
     - name: Update Deployments Secrets
       run: |
         cat <<EOF>> web/.env.prod
+        DEBUG=1
         AWS_ACCESS_KEY_ID=${{secrets.AWS_ACCESS_KEY_ID}}
         AWS_SECRET_ACCESS_KEY=${{secrets.AWS_SECRET_ACCESS_KEY}}
         ALLOWED_HOST=${{secrets.ALLOWED_HOST}}
